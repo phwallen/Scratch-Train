@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="None">
+        
+        
+        <link rel="shortcut icon" href="./img/favicon.ico">
+        <title>Scratch Train Controller</title>
+        <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="./css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="./css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="./css/highlight.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="./js/jquery-1.10.2.min.js"></script>
+        <script src="./js/bootstrap-3.0.3.min.js"></script>
+        <script src="./js/highlight.pack.js"></script> 
+    </head>
+
+    <body class="homepage">
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href=".">Scratch Train Controller</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#overview">Overview</a></li>
+        <li class="main "><a href="#dcc">DCC++</a></li>
+        <li class="main "><a href="#microbit">micro:bit</a></li>
+        <li class="main "><a href="#track-sensors">Track sensors</a></li>
+        <li class="main "><a href="#construction">Construction</a></li>
+        <li class="main "><a href="#microbit-software">micro:bit software</a></li>
+            <li><a href="#scratch-train-commands">Scratch Train Commands</a></li>
+            <li><a href="#scratch-custom-blocks">Scratch custom blocks</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="overview">Overview</h1>
+<p>I wondered if it was possible to get a Scratch program to control a model railway using a micro:bit to generate DCC messages. Well, maybe it is, but, my preliminary experiments proved unsuccessful and I wasn't able to obtain sufficient speed for the required pulse width for the bipolar signal.  While doing my initial research,however, I came  across an open source project called DccPlusPlus (also known as DCC++).  This is a truly amazing piece of software that  runs on the Arduino platform acting as a sophisticated DCC base station. Not only is the software brilliant, but the author, Greg Berman, has produced some really good documentation that includes a set of videos that, as well as explaining the implementation of a DCC++ Base Station, provides an easy to understand introduction to DCC. </p>
+<p>Scratch can't directly communicate with an Arduino, but can with a micro:bit, so,  I decided my project would be based on DCC++ and use the micro:bit to provide an interface between Scratch and the Arduino.  The Scratch / micro:bit extension uses an intermediary piece of software called <a href="https://scratch.mit.edu/microbit">Scratch Link</a> which must be installed on the computer running a scratch program. Scratch Link requires a special program to be installed on the micro:bit which interacts with a set of Scratch blocks that make up the Scratch / micro:bit extension.</p>
+<p>To make the Scratch / DCC++ interface as easy to install and use, I'm using the standard micro:bit extension, so, all you need to do is press the add extension button in the Scratch editor and add the micro:bit extension. This makes available a set of blocks (green) that communicates with the micro:bit allowing a limited number of functions such as detecting when buttons are pressed and displaying text on the micro:bit's LED matrix. To enable the extension to communicate with DCC++ running on the Arduino, I've written an alternative program to the standard one provided with the Scratch / micro:bit extension.</p>
+<p>The alternative program (Scratch-Train.hex) takes commands sent using the 'display text' and 'display' blocks and sends them to the Arduino running the DCC++ software.  It can also feed information from DCC++, such as sensor activations, and trigger the event blocks 'when button pressed' and 'when pin connected'.</p>
+<p>By incorporating these blocks into your Scratch program, you can write customised train controllers and scripts to automate model railways.  </p>
+<p><img alt="Figure 1" src="./images/Block_diagram.PNG" /></p>
+<p><em>Figure 1 Block Diagram of the Scratch DCC++ interface</em></p>
+<p>Figure 1 shows the main components of the Scratch DCC++ interface. When you add the micro:bit extension to your Scratch program it will check that the  <a href="https://scratch.mit.edu/microbit">Scratch Link</a>  program is installed. Scratch Link will look for micro:bits that are advertising the Bluetooth Scratch service. If an appropriately configured micro:bit is discovered, you will be able to connect to it and communicate using the micro:bit blocks. The micro:bit program will interpret the instructions sent from Scratch and build the appropriate <a href="https://github.com/DccPlusPlus/BaseStation/wiki/Commands-for-DCCpp-BaseStation">DCC++ commands</a> and send them to the the DCC++ program running on the Arduino. Additionally, track sensor data interpreted by DCC++ is relayed to Scratch via the micro:bit.</p>
+<h1 id="dcc">DCC++</h1>
+<p>Scratch-Train requires DCC++ to be installed on a Arduino Uno micro computer connected to an appropriate motor shield. I recommend viewing the following brilliant YouTube videos:</p>
+<p>The first video provides a background to <a href="https://www.nmra.org/index-nmra-standards-and-recommended-practices">DCC</a> provides and introduction to DCC  and delves into the DCC signal protocol.</p>
+<p><a href="https://youtu.be/-nsVdpMhiTU">An Arduino DCC++ Base Station - Part 1 of 4</a></p>
+<p>The second video goes into more detail on how the Arduino hardware can produce dcc signals.</p>
+<p><a href="https://youtu.be/rX05axpgROk">An Arduino DCC++ Base Station - Part 2 of 4</a></p>
+<p>The third video describes the DCC bipolar signals and how they are produced using the Arduino motor shield.</p>
+<p><a href="https://youtu.be/6BRvv45db9o">An Arduino DCC++ Base Station - Part 3 of 4</a></p>
+<p>The final video in the series deals describes how the Arduino Uno board, the motor shield and the power supply come together to make the DCC++ base station. In particular it describes the modification that needs to be made to the motor shield to allow it to handle voltages greater than 12 volts.</p>
+<p><a href="https://youtu.be/8cBQoI1NfHI">An Arduino DCC++ Base Station - Part 4 of 4</a></p>
+<p>To complete the DCC++ base station you will need to download the <a href="https://github.com/DccPlusPlus/BaseStation">DCC++ program</a> and install it on the Arduino Uno. If you are new to the Arduino platform you will need to install the <a href="https://www.arduino.cc/en/Main/Software">Arduino IDE</a> on your computer.</p>
+<h1 id="microbit">micro:bit</h1>
+<p>The <a href="http://microbit.org/guide/">micro:bit</a> is an amazing bit of kit for those of you who like building electronic gadgets.
+It's ability to use Bluetooth Low Energy, it's ease to program and connect external components, makes the micro:bit an ideal and cheap way to build interfaces.</p>
+<p>The micro:bit communicates with Scratch Link over Bluetooth low energy. The messages sent using the Scratch 'display' and 'display text' blocks are converted to DCC++ commands and sent to the Arduino using a serial communication link.</p>
+<p>A small problem occurs because the Arduino Uno operates at 5 volt logic levels  and the micro:bit at 3 volt. This is easily resolved using a Logic Level Converter that takes the the 3 volt outputs from the micro:bit and converts them to 5 volt inputs to the Uno and vice versa.</p>
+<h1 id="track-sensors">Track sensors</h1>
+<p>Scratch-Train is capable of detecting when a train passes over a sensor. A maximum of 5 sensors can be connected. This is because the Scratch program uses the micro:bit extension blocks  <strong>'when pin connected'</strong> (3 possible states thus 3 sensors) and <strong>'when button pressed'</strong>(2 possible states thus 2 sensors). </p>
+<p>DCC++ has a clever algorithm for detecting when a sensor is activated and avoiding "de-bounce" spikes generated by mechanical switches and transistors. In my prototype I'm using "hall-effect" devices that are activated when a magnet passes over them.</p>
+<p>The hall-effect switch is a small device that fits on the railway track. The A1121LUA -T is just the right size to fit between the sleepers of a OO guage track.</p>
+<p><img alt="hall-effect switch" src="./images/hall-effect_switch.jpg" /></p>
+<p><em>The hall-effect switch fitted between the sleepers</em></p>
+<p>The flat side of the device should be facing upwards towards the underside of the train. Care must be taken to ensure the three leads that protrude from the device do not touch each other or the metal rail.</p>
+<p>For detailed information of the device see the <a href="http://www.allegromicro.com/en/Products/Magnetic-Digital-Position-Sensor-ICs/Hall-Effect-Unipolar-Switches/~/media/Files/Datasheets/A112x-Datasheet.ashx">device data sheet</a> </p>
+<p>The switch is activated when the south-pole of a magnet passes over the hall-effect device.</p>
+<p><img alt="magnet fitted to the underside of the train" src="./images/magnet_under_train.jpg" /></p>
+<p><em>Picture showing a magnet located beneath the train secured with Blutack</em></p>
+<h1 id="construction">Construction</h1>
+<p><img alt="Figure 2" src="./images/Prototype.PNG" /></p>
+<p><em>Figure 2 Prototype</em></p>
+<p>Figure 2 shows a prototype of the interface consisting of: </p>
+<ul>
+<li>micro:bit (mounted on an edge connector from <a href="https://www.kitronik.co.uk/microbit/bbc-micro-bit-accessories.html">Kitronik</a>)</li>
+<li>suitable Logic Level Converter  (I'm using a TXS0108E  available on Amazon )</li>
+<li>Arduino Uno Board R3</li>
+<li>Arduino Motor Shield R3 (i'm using the Deek Robot (diymore) L298P Shield Expansion Board DC Motor Driver Module 2A H-Bridge 2 way For Arduino UNO R3 Mega2560 ) available on Amazon)</li>
+</ul>
+<p>You will require a suitable power supply (or power supplies). The DCC++ videos recommend a 15 volt DC regulated power supply to power the trains, although I'm using a 13.8 volt supply without any problems. Obviously, the supply must be of sufficient current to power the model railway. Additionally, the Arduino Uno will require a 5 volt supply as will the micro:bit. The micro:bit has a number options for it's power, for the prototype I've chosen to power both Arduino and micro:bit through their respective USB connections using 5 volts.</p>
+<p><img alt="Figure 3" src="./images/Arduino-microbit-hookup.PNG" /></p>
+<p><em>Figure 3 Arduino / micro:bit hookup</em></p>
+<p>Figure 3 shows how the Arduino and the micro:bit are connected via the TXS0108E logic level converter.. The diagram shows the Arduino motor shield. It is assumed the motor shield is mounted on top of the Arduino Uno as explained in the DCC++ videos. </p>
+<p><img alt="Figure 4" src="./images/Hall-effect-sensor-connection.PNG" /></p>
+<p><em>Figure 4 Connecting Hall Effect Sensors</em></p>
+<p>Figure 4 shows how Hall-effect sensors can be connected to the Arduino. Sensors have been connected to pins 6 and 7. Additional sensors (maximum of 5 as explained above) could be connected to available pins (e.g. 2,3,4). The sensors will have to be configured in the DCC++ program as explained under the <strong>Sensors</strong> section of the <a href="https://github.com/DccPlusPlus/BaseStation/wiki/Commands-for-DCCpp-BaseStation">DCC++ commands</a> document.</p>
+<h1 id="microbit-software">micro:bit software</h1>
+<p>The Scratch micro:bit extension usually requires a special program(scratch-microbit-1.1.0.hex) to be downloaded onto the micro:bit, however, to use Scratch Train, this program must be replaced.  Using the web browser on your computer, download: <a href="https://phwallen.github.io/Microbit-Explorer.hex">https://phwallen.github.io/Microbit-Explorer.hex </a>.</p>
+<p>Scratch-Train is a program written in C++ that runs on the micro:bit. It communicates with Scratch Link using Bluetooth Low Energy (BLE).  Once downloaded the program will display <strong>S</strong> on the LED matrix of the micro:bit and advertise BLE service 'F005'.  This is the service used by Scratch Link and when in range of the micro:bit, will display a <strong>Connect</strong> button.</p>
+<p>Once connected, the micro:bit will display <strong>C</strong> indicating that messages can be sent and received between your Scratch program and DCC++.</p>
+<p>If the micro:bit looses connection with Scratch Link it will display <strong>D</strong>  and reconnection will be necessary.</p>
+<p>The interface uses the following micro:bit extension (green) blocks :</p>
+<ul>
+<li><strong>display text</strong> is used to send valid <a href="https://github.com/DccPlusPlus/BaseStation/wiki/Commands-for-DCCpp-BaseStation">DCC++ commands</a>  e.g. &lt;t 1 3 20 1&gt;</li>
+<li><strong>display</strong> is used to send Scratch train commands ( see Table 1 below)</li>
+<li><strong>when A/B button pressed</strong> detect if the A or B button is pressed and when DCC++ detects a Sensor is activated (sensor &lt;Q4&gt; = A button , sensor &lt;Q5&gt; = B button) . </li>
+<li><strong>A/B button pressed?"</strong></li>
+<li><strong>when pin 0/1/2 connected</strong> when DCC++ detects: &lt;Q1 = pin 0&gt;  &lt;Q2 = pin 1&gt; &lt;Q3 = pin 2&gt;</li>
+</ul>
+<p>The remaining extension blocks are undefined.</p>
+<h2 id="scratch-train-commands">Scratch Train Commands</h2>
+<p>A problem can arise when sending DCC++ commands using the <strong>display text</strong> block. <strong>display text</strong> will block the Scratch program until it believes enough time has passed to scroll the text across the micro:bit LED matrix. The delay is based on a notional value of about 1 second per character in the text. Hence the command to move a train forward &lt;t 1 3 20 1&gt; would block the program for about 12 seconds. Consequently, a subsequent command (perhaps an important one like stop the train) would not be able to execute for 12 seconds, possibly with catastrophic results for the train!</p>
+<p>The solution is to use the <strong>display</strong> block, which does not delay,  to send a single DCC++ command. The <strong>display</strong> block is designed to send an image to the micro:bit's LED matrix. This is made from a pattern of 5 x 5 values each value being on or off i.e. a 25 bit pattern.  </p>
+<p>Only the first 3 rows are used to make a command that consists of a maximum of 3 parameters. Each parameter is 5 bits (decimal value 0 - 31) long. </p>
+<ul>
+<li>parameter 1 command </li>
+<li>parameter 2 address </li>
+<li>parameter 3 speed  (only required for throttle commands 1 &amp; 2). Note the speed parameter is multiplied by 4 when converted to the DCC++ command. e.g. 10100 = a speed of 20 (5 x 4).</li>
+</ul>
+<p>N.B. the decimal values for each parameter are determine by a bit pattern where the left hand bit represents the least significant bit. e.g. 10000 = 1 and 00001 = 16</p>
+<p>The following table shows a list of commands that can be used with the <strong>display</strong> block:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Bit Pattern</th>
+<th>Operation</th>
+<th>DCC++ Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>00000</td>
+<td>Stop Train</td>
+<td>&lt;t 1 [address] 0 0&gt;</td>
+</tr>
+<tr>
+<td>1</td>
+<td>10000</td>
+<td>Forward Train</td>
+<td>&lt;t 1 [address] [speed] 1&gt;</td>
+</tr>
+<tr>
+<td>2</td>
+<td>01000</td>
+<td>Reverse Train</td>
+<td>&lt;t 1 [address] [speed] 0&gt;</td>
+</tr>
+<tr>
+<td>3</td>
+<td>11000</td>
+<td>Accessory Deactivate</td>
+<td>&lt;a [address] 0 0&gt;</td>
+</tr>
+<tr>
+<td>4</td>
+<td>00100</td>
+<td>Accessory Activate</td>
+<td>&lt;a [address] 0 1&gt;</td>
+</tr>
+<tr>
+<td>5</td>
+<td>10100</td>
+<td>Cab Function F0 ON</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>6</td>
+<td>01100</td>
+<td>Cab Function F0 OFF</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>7</td>
+<td>11100</td>
+<td>Cab Function F1 ON</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>8</td>
+<td>00010</td>
+<td>Cab Function F1 OFF</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>9</td>
+<td>10010</td>
+<td>Cab Function F2 ON</td>
+<td>&lt;f [address] [function code</td>
+</tr>
+<tr>
+<td>10</td>
+<td>01010</td>
+<td>Cab Function F2 OFF</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>11</td>
+<td>11010</td>
+<td>Cab Function F3 ON</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>12</td>
+<td>00110</td>
+<td>Cab Function F3 OFF</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>13</td>
+<td>10110</td>
+<td>Cab Function F4 ON</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>14</td>
+<td>01110</td>
+<td>Cab Function F4 OFF</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>15</td>
+<td>11110</td>
+<td>Cab Function F5 ON</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>16</td>
+<td>00001</td>
+<td>Cab Function F5 OFF</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>17</td>
+<td>10001</td>
+<td>Cab Function F6 ON</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>18</td>
+<td>01001</td>
+<td>Cab Function F6 OFF</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>19</td>
+<td>11001</td>
+<td>Cab Function F7 ON</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>20</td>
+<td>00101</td>
+<td>Cab Function F7 OFF</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>21</td>
+<td>10101</td>
+<td>Cab Function F8 ON</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>22</td>
+<td>01101</td>
+<td>Cab Function F8 OFF</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>23</td>
+<td>11101</td>
+<td>Cab Function F9 ON</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>24</td>
+<td>00011</td>
+<td>Cab Function F9 OFF</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>25</td>
+<td>10011</td>
+<td>Cab Function F10 ON</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>26</td>
+<td>01011</td>
+<td>Cab Function F10 OFF</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>27</td>
+<td>11011</td>
+<td>Cab Function F11 ON</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>28</td>
+<td>00111</td>
+<td>Cab Function F11 OFF</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>29</td>
+<td>10111</td>
+<td>Cab Function F12 ON</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>30</td>
+<td>01111</td>
+<td>Cab Function F12 OFF</td>
+<td>&lt;f [address] [function code]&gt;</td>
+</tr>
+<tr>
+<td>31</td>
+<td>11111</td>
+<td>reserved</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><em>Table 1 commands available using the display block</em></p>
+<p>The above table only represents a limited number of DCC++ commands. Certain commands will still require the use of the <strong>display text</strong> block. For example: Turn power off &lt;0&gt; and Turn power on &lt;1&gt; Also, specialist commands such as programming the sensors should be done with <strong>display text</strong>.</p>
+<h2 id="scratch-custom-blocks">Scratch custom blocks</h2>
+<p>It is recommended that <strong>display text</strong> and <strong>display</strong> commands are wrapped in a <strong>My  Blocks</strong> wrapper.</p>
+<p><img alt="Figure 5" src="./images/Emergency_Stop.PNG" /></p>
+<p><em>Figure 5 Scratch My Blocks Emergency Stop</em></p>
+<p>For example, Figure 5 shows the DCC++ command: <strong>power off</strong> being wrapped in a custom block called Emergency Stop.</p>
+<p>The use of the <strong>display</strong> block to send a command makes it more important to use a My Blocks wrapper. </p>
+<p><img alt="Figure 6" src="./images/display.PNG" /></p>
+<p><em>Figure 6  Example of using a display block to send a command</em></p>
+<p>Figure 6 shows the bit pattern to send the DCC++ command &lt;t 1 3 12 1&gt; (throttle address=3 speed=12 forward).
+Using Table 1 (see above), you can see the 3 rows of the bit pattern are:</p>
+<ul>
+<li>10000  command 1 Forward Train</li>
+<li>11000 address 3</li>
+<li>11000 speed 12 (remember the binary value i.e. 3 is multiplied by 4)</li>
+</ul>
+<p>To make such a command easier to use, it's recommended that it's wrapped in a My Block that includes a routine to create the bit patterns from more readable parameters.</p>
+<p><img alt="Figure 7" src="./images/Forward.PNG" /></p>
+<p><em>Figure 7 Example of a wrapper for a Forward command</em></p>
+<p>Figure 7 is an example of a My Block called Forward which takes 2 integer parameters - address and speed. As you can see it uses a function, another My Block, called  intToBin, to convert the 2 integer values to the appropriate bit patterns. </p>
+<p><img alt="Figure 8" src="./images/intToBin.PNG" /></p>
+<p><em>Figure 8 Scratch My Block intToBin</em></p>
+<p>Figure 8 shows an example of a function that is used in Forward block described in Figure 7 to create a binary bit pattern from an integer.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>var base_url = '.';</script>
+        <script src="./js/base.js"></script>
+        <script src="./search/require.js"></script>
+        <script src="./search/search.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&larr;</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&rarr;</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    </body>
+</html>
+
+<!--
+MkDocs version : 0.17.2
+Build Date UTC : 2020-04-22 15:50:43
+-->
