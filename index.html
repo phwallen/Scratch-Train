@@ -69,7 +69,7 @@
 <p>To make the Scratch / DCC++ interface as easy to install and use, I'm using the standard micro:bit extension, so, all you need to do is press the add extension button in the Scratch editor and add the micro:bit extension. This makes available a set of blocks (green) that communicates with the micro:bit allowing a limited number of functions such as detecting when buttons are pressed and displaying text on the micro:bit's LED matrix. To enable the extension to communicate with DCC++ running on the Arduino, I've written an alternative program to the standard one provided with the Scratch / micro:bit extension.</p>
 <p>The alternative program (Scratch-Train.hex) takes commands sent using the 'display text' and 'display' blocks and sends them to the Arduino running the DCC++ software.  It can also feed information from DCC++, such as sensor activations, and trigger the event blocks 'when button pressed' and 'when pin connected'.</p>
 <p>By incorporating these blocks into your Scratch program, you can write customised train controllers and scripts to automate model railways.  </p>
-<p><img alt="Figure 1" src="./images/Block_diagram.PNG" /></p>
+<p><img alt="Figure 1" src="./images/Block_diagram.png" /></p>
 <p><em>Figure 1 Block Diagram of the Scratch DCC++ interface</em></p>
 <p>Figure 1 shows the main components of the Scratch DCC++ interface. When you add the micro:bit extension to your Scratch program it will check that the  <a href="https://scratch.mit.edu/microbit">Scratch Link</a>  program is installed. Scratch Link will look for micro:bits that are advertising the Bluetooth Scratch service. If an appropriately configured micro:bit is discovered, you will be able to connect to it and communicate using the micro:bit blocks. The micro:bit program will interpret the instructions sent from Scratch and build the appropriate <a href="https://github.com/DccPlusPlus/BaseStation/wiki/Commands-for-DCCpp-BaseStation">DCC++ commands</a> and send them to the the DCC++ program running on the Arduino. Additionally, track sensor data interpreted by DCC++ is relayed to Scratch via the micro:bit.</p>
 <h1 id="dcc">DCC++</h1>
@@ -100,7 +100,7 @@ It's ability to use Bluetooth Low Energy, it's ease to program and connect exter
 <p><img alt="magnet fitted to the underside of the train" src="./images/magnet_under_train.jpg" /></p>
 <p><em>Picture showing a magnet located beneath the train secured with Blutack</em></p>
 <h1 id="construction">Construction</h1>
-<p><img alt="Figure 2" src="./images/Prototype.PNG" /></p>
+<p><img alt="Figure 2" src="./images/Prototype.png" /></p>
 <p><em>Figure 2 Prototype</em></p>
 <p>Figure 2 shows a prototype of the interface consisting of: </p>
 <ul>
@@ -110,14 +110,14 @@ It's ability to use Bluetooth Low Energy, it's ease to program and connect exter
 <li>Arduino Motor Shield R3 (i'm using the Deek Robot (diymore) L298P Shield Expansion Board DC Motor Driver Module 2A H-Bridge 2 way For Arduino UNO R3 Mega2560 ) available on Amazon)</li>
 </ul>
 <p>You will require a suitable power supply (or power supplies). The DCC++ videos recommend a 15 volt DC regulated power supply to power the trains, although I'm using a 13.8 volt supply without any problems. Obviously, the supply must be of sufficient current to power the model railway. Additionally, the Arduino Uno will require a 5 volt supply as will the micro:bit. The micro:bit has a number options for it's power, for the prototype I've chosen to power both Arduino and micro:bit through their respective USB connections using 5 volts.</p>
-<p><img alt="Figure 3" src="./images/Arduino-microbit-hookup.PNG" /></p>
+<p><img alt="Figure 3" src="./images/Arduino-microbit-hookup.png" /></p>
 <p><em>Figure 3 Arduino / micro:bit hookup</em></p>
 <p>Figure 3 shows how the Arduino and the micro:bit are connected via the TXS0108E logic level converter.. The diagram shows the Arduino motor shield. It is assumed the motor shield is mounted on top of the Arduino Uno as explained in the DCC++ videos. </p>
-<p><img alt="Figure 4" src="./images/Hall-effect-sensor-connection.PNG" /></p>
+<p><img alt="Figure 4" src="./images/Hall-effect-sensor-connection.png" /></p>
 <p><em>Figure 4 Connecting Hall Effect Sensors</em></p>
 <p>Figure 4 shows how Hall-effect sensors can be connected to the Arduino. Sensors have been connected to pins 6 and 7. Additional sensors (maximum of 5 as explained above) could be connected to available pins (e.g. 2,3,4). The sensors will have to be configured in the DCC++ program as explained under the <strong>Sensors</strong> section of the <a href="https://github.com/DccPlusPlus/BaseStation/wiki/Commands-for-DCCpp-BaseStation">DCC++ commands</a> document.</p>
 <h1 id="microbit-software">micro:bit software</h1>
-<p>The Scratch micro:bit extension usually requires a special program(scratch-microbit-1.1.0.hex) to be downloaded onto the micro:bit, however, to use Scratch Train, this program must be replaced.  Using the web browser on your computer, download: <a href="https://phwallen.github.io/Microbit-Explorer.hex">https://phwallen.github.io/Microbit-Explorer.hex </a>.</p>
+<p>The Scratch micro:bit extension usually requires a special program(scratch-microbit-1.1.0.hex) to be downloaded onto the micro:bit, however, to use Scratch Train, this program must be replaced.  Using the web browser on your computer, download: <a href="https://phwallen.github.io/Scratch-Train.hex">https://phwallen.github.io/Scratch-Train.hex </a>.</p>
 <p>Scratch-Train is a program written in C++ that runs on the micro:bit. It communicates with Scratch Link using Bluetooth Low Energy (BLE).  Once downloaded the program will display <strong>S</strong> on the LED matrix of the micro:bit and advertise BLE service 'F005'.  This is the service used by Scratch Link and when in range of the micro:bit, will display a <strong>Connect</strong> button.</p>
 <p>Once connected, the micro:bit will display <strong>C</strong> indicating that messages can be sent and received between your Scratch program and DCC++.</p>
 <p>If the micro:bit looses connection with Scratch Link it will display <strong>D</strong>  and reconnection will be necessary.</p>
@@ -349,11 +349,11 @@ It's ability to use Bluetooth Low Energy, it's ease to program and connect exter
 <p>The above table only represents a limited number of DCC++ commands. Certain commands will still require the use of the <strong>display text</strong> block. For example: Turn power off &lt;0&gt; and Turn power on &lt;1&gt; Also, specialist commands such as programming the sensors should be done with <strong>display text</strong>.</p>
 <h2 id="scratch-custom-blocks">Scratch custom blocks</h2>
 <p>It is recommended that <strong>display text</strong> and <strong>display</strong> commands are wrapped in a <strong>My  Blocks</strong> wrapper.</p>
-<p><img alt="Figure 5" src="./images/Emergency_Stop.PNG" /></p>
+<p><img alt="Figure 5" src="./images/Emergency_Stop.png" /></p>
 <p><em>Figure 5 Scratch My Blocks Emergency Stop</em></p>
 <p>For example, Figure 5 shows the DCC++ command: <strong>power off</strong> being wrapped in a custom block called Emergency Stop.</p>
 <p>The use of the <strong>display</strong> block to send a command makes it more important to use a My Blocks wrapper. </p>
-<p><img alt="Figure 6" src="./images/display.PNG" /></p>
+<p><img alt="Figure 6" src="./images/display.png" /></p>
 <p><em>Figure 6  Example of using a display block to send a command</em></p>
 <p>Figure 6 shows the bit pattern to send the DCC++ command &lt;t 1 3 12 1&gt; (throttle address=3 speed=12 forward).
 Using Table 1 (see above), you can see the 3 rows of the bit pattern are:</p>
@@ -363,10 +363,10 @@ Using Table 1 (see above), you can see the 3 rows of the bit pattern are:</p>
 <li>11000 speed 12 (remember the binary value i.e. 3 is multiplied by 4)</li>
 </ul>
 <p>To make such a command easier to use, it's recommended that it's wrapped in a My Block that includes a routine to create the bit patterns from more readable parameters.</p>
-<p><img alt="Figure 7" src="./images/Forward.PNG" /></p>
+<p><img alt="Figure 7" src="./images/Forward.png" /></p>
 <p><em>Figure 7 Example of a wrapper for a Forward command</em></p>
 <p>Figure 7 is an example of a My Block called Forward which takes 2 integer parameters - address and speed. As you can see it uses a function, another My Block, called  intToBin, to convert the 2 integer values to the appropriate bit patterns. </p>
-<p><img alt="Figure 8" src="./images/intToBin.PNG" /></p>
+<p><img alt="Figure 8" src="./images/intToBin.png" /></p>
 <p><em>Figure 8 Scratch My Block intToBin</em></p>
 <p>Figure 8 shows an example of a function that is used in Forward block described in Figure 7 to create a binary bit pattern from an integer.</p></div>
         </div>
@@ -450,5 +450,5 @@ Using Table 1 (see above), you can see the 3 rows of the bit pattern are:</p>
 
 <!--
 MkDocs version : 0.17.2
-Build Date UTC : 2020-04-22 15:50:43
+Build Date UTC : 2020-04-22 19:02:45
 -->
