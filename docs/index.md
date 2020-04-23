@@ -15,7 +15,7 @@ By incorporating these blocks into your Scratch program, you can write customise
 
 Figure 1 shows the main components of the Scratch DCC++ interface. When you add the micro:bit extension to your Scratch program it will check  the  [Scratch Link](https://scratch.mit.edu/microbit)  program is installed. Scratch Link will look for micro:bits that are advertising the Bluetooth Scratch service. If an appropriately configured micro:bit is discovered, you will be able to connect to it and communicate using the micro:bit blocks. The micro:bit program will interpret the instructions sent from Scratch and build the appropriate [DCC++ commands](https://github.com/DccPlusPlus/BaseStation/wiki/Commands-for-DCCpp-BaseStation) sending them to the the DCC++ program running on the Arduino. Additionally, track sensor data interpreted by DCC++ is relayed to Scratch via the micro:bit.
 
-<iframe width="480" height="270" src="https://www.youtube.com/embed/Jflf77bLC34" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/0I_Rga1sl6s" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 # DCC++
 Scratch-Train requires DCC++ to be installed on a Arduino Uno micro computer connected to an appropriate motor shield. I recommend viewing the following brilliant YouTube videos:
